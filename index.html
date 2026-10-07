@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>대만 여행 미니 사전</title>
+<style>
+:root{
+  --bg:#f5f6f8; --card:#fff; --text:#111827; --muted:#6b7280; --line:#e5e7eb;
+  --green:#0f766e; --green2:#ecfdf5; --navy:#0f172a; --orange:#fff7ed;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Roboto,Arial,sans-serif;
+}
+.app{max-width:760px;margin:0 auto;padding:0 14px 100px}
+header{
+  position:sticky;top:0;z-index:30;
+  background:rgba(245,246,248,.95);backdrop-filter:blur(14px);
+  padding:12px 0 9px;border-bottom:1px solid var(--line)
+}
+.head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+h1{font-size:21px;margin:0}
+.subtitle{font-size:12px;color:var(--muted);margin-top:3px}
+.offline{font-size:11px;font-weight:800;background:var(--green2);color:var(--green);padding:6px 8px;border-radius:999px}
+.search{margin-top:10px}
+input,textarea{
+  width:100%;border:1px solid #d7dbe1;background:#fff;border-radius:15px;
+  font-size:16px;padding:13px 14px;outline:none;color:var(--text)
+}
+input:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(15,118,110,.1)}
+.tabs{display:flex;overflow:auto;gap:7px;padding:10px 0 2px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  white-space:nowrap;border:1px solid #d7dbe1;background:#fff;border-radius:999px;
+  padding:8px 12px;font-size:13px;font-weight:700
+}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.title{font-size:16px;font-weight:900;margin:18px 2px 9px}
+.card{
+  background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;margin:9px 0;
+  box-shadow:0 1px 2px rgba(0,0,0,.025)
+}
+.kr{font-size:15px;font-weight:800}
+.zh{font-size:23px;font-weight:900;margin-top:5px;letter-spacing:.2px}
+.pron{font-size:15px;font-weight:800;color:var(--green);margin-top:3px}
+.py{font-size:12px;color:var(--muted);margin-top:2px}
+.actions{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
+button{
+  border:0;border-radius:12px;padding:10px 12px;font-size:14px;font-weight:800;cursor:pointer
+}
+.secondary{background:#f1f5f9;color:#111827}
+.dark{background:var(--navy);color:#fff}
+.green{background:var(--green);color:#fff}
+.orange{background:#ffedd5;color:#9a3412}
+.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.quick button{
+  text-align:left;background:#fff;border:1px solid var(--line);padding:11px
+}
+.quick b{display:block;font-size:14px}
+.quick span{display:block;font-size:12px;color:var(--muted);margin-top:4px}
+.translator{
+  background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px
+}
+textarea{min-height:95px;resize:vertical}
+.toolbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.microw{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.mic{padding:13px 10px}
+.status{font-size:12px;color:var(--muted);margin-top:9px;min-height:18px}
+.note{
+  margin-top:10px;background:var(--orange);color:#7c2d12;border-radius:12px;
+  padding:10px 12px;font-size:12px;line-height:1.5
+}
+.hotel{
+  background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;margin-top:10px
+}
+.hotel .cn{font-weight:900;font-size:18px;margin-top:5px}
+.hotel .addr{font-size:16px;margin-top:6px}
+.empty{text-align:center;color:var(--muted);padding:30px 0}
+.fab{
+  position:fixed;right:16px;bottom:18px;z-index:40;
+  background:var(--navy);color:#fff;text-decoration:none;padding:13px 16px;
+  border-radius:999px;font-weight:900;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.25)
+}
+@media(min-width:620px){
+ .quick{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="head">
+    <div>
+      <h1>🇹🇼 대만 여행 미니 사전</h1>
+      <div class="subtitle">번체중국어 · 한국식 발음 · 듣기 · 음성입력</div>
+    </div>
+    <div class="offline">사전 오프라인</div>
+  </div>
+  <div class="search"><input id="search" placeholder="예: 카드, 화장실, 택시, 물, 할인…"></div>
+  <div class="tabs" id="tabs"></div>
+</header>
+
+<div class="title">⭐ 자주 쓰는 표현</div>
+<div class="quick" id="quick"></div>
+
+<div class="title" id="translator">🎙️ 말해서 번역</div>
+<div class="translator">
+  <textarea id="translateText" placeholder="직접 입력하거나 아래 마이크를 눌러 말하세요."></textarea>
+
+  <div class="microw">
+    <button id="micKo" class="green mic" onclick="startVoice('ko-KR')">🎙️ 한국어 말하기</button>
+    <button id="micZh" class="orange mic" onclick="startVoice('zh-TW')">🎙️ 중국어 듣기</button>
+  </div>
+
+  <div class="toolbar">
+    <button class="dark" onclick="openPapago()">Papago 번역</button>
+    <button class="secondary" onclick="openGoogle()">Google 번역</button>
+  </div>
+
+  <div class="toolbar">
+    <button class="secondary" onclick="openPapagoHome()">🎙️ Papago 앱/웹에서 음성번역</button>
+    <button class="secondary" onclick="copyTranslateText()">📋 입력문 복사</button>
+  </div>
+
+  <div class="status" id="voiceStatus">마이크 기능 확인 중…</div>
+  <div class="note" id="voiceNote">
+    기본 사전과 발음 표시는 오프라인에서도 사용할 수 있습니다.
+    자유문장 번역은 Papago 또는 Google 번역을 새 창으로 엽니다.
+  </div>
+</div>
+
+<div class="title">🏨 숙소 바로 보여주기</div>
+<div class="hotel">
+  <div>Via Hotel Taipei Station</div>
+  <div class="cn">丰居旅店 北車館</div>
+  <div class="addr">台北市中正區重慶南路一段60號</div>
+  <div class="actions">
+    <button class="secondary" onclick="copyText('丰居旅店 北車館\n台北市中正區重慶南路一段60號')">📋 주소 복사</button>
+    <button class="secondary" onclick="speak('丰居旅店 北車館，台北市中正區重慶南路一段60號')">🔊 읽기</button>
+  </div>
+</div>
+
+<div class="title">📖 표현 모음</div>
+<div id="list"></div>
+
+<a class="fab" href="#translator">🎙️ 번역</a>
+</div>
+
+<script>
+const phrases = [
+{c:"기본",kr:"안녕하세요",zh:"你好",p:"니 하오",py:"nǐ hǎo"},
+{c:"기본",kr:"감사합니다",zh:"謝謝",p:"시에시에",py:"xièxie"},
+{c:"기본",kr:"죄송합니다 / 미안합니다",zh:"對不起",p:"뚜이부치",py:"duìbuqǐ"},
+{c:"기본",kr:"괜찮아요",zh:"沒關係",p:"메이관시",py:"méi guānxi"},
+{c:"기본",kr:"네 / 맞아요",zh:"是",p:"스",py:"shì"},
+{c:"기본",kr:"아니요 / 아닙니다",zh:"不是",p:"부스",py:"bú shì"},
+{c:"기본",kr:"잘 모르겠어요",zh:"我不知道",p:"워 부 즈다오",py:"wǒ bù zhīdào"},
+{c:"기본",kr:"영어 할 수 있나요?",zh:"可以說英文嗎？",p:"커이 슈어 잉원 마?",py:"kěyǐ shuō Yīngwén ma?"},
+{c:"기본",kr:"천천히 말해 주세요",zh:"請說慢一點",p:"칭 슈어 만 이디엔",py:"qǐng shuō màn yìdiǎn"},
+{c:"기본",kr:"한 번 더 말해 주세요",zh:"請再說一次",p:"칭 짜이 슈어 이츠",py:"qǐng zài shuō yí cì"},
+{c:"기본",kr:"사진 찍어도 되나요?",zh:"可以拍照嗎？",p:"커이 파이자오 마?",py:"kěyǐ pāizhào ma?"},
+{c:"기본",kr:"괜찮습니다 / 필요 없어요",zh:"不用，謝謝",p:"부용, 시에시에",py:"bú yòng, xièxie"},
+
+{c:"쇼핑",kr:"이거 주세요",zh:"我要這個",p:"워 야오 쩌거",py:"wǒ yào zhège"},
+{c:"쇼핑",kr:"얼마예요?",zh:"多少錢？",p:"뚜어샤오 치엔?",py:"duōshǎo qián?"},
+{c:"쇼핑",kr:"너무 비싸요",zh:"太貴了",p:"타이 꾸이 러",py:"tài guì le"},
+{c:"쇼핑",kr:"조금 할인되나요?",zh:"可以便宜一點嗎？",p:"커이 피엔이 이디엔 마?",py:"kěyǐ piányi yìdiǎn ma?"},
+{c:"쇼핑",kr:"카드 돼요?",zh:"可以刷卡嗎？",p:"커이 슈아카 마?",py:"kěyǐ shuākǎ ma?"},
+{c:"쇼핑",kr:"현금",zh:"現金",p:"시엔진",py:"xiànjīn"},
+{c:"쇼핑",kr:"영수증 주세요",zh:"請給我發票",p:"칭 게이 워 파퍄오",py:"qǐng gěi wǒ fāpiào"},
+{c:"쇼핑",kr:"택스리펀 되나요?",zh:"可以退稅嗎？",p:"커이 투이쉐이 마?",py:"kěyǐ tuìshuì ma?"},
+{c:"쇼핑",kr:"대만 한정 모델 있나요?",zh:"有台灣限定款嗎？",p:"요우 타이완 시엔딩 콴 마?",py:"yǒu Táiwān xiàndìng kuǎn ma?"},
+{c:"쇼핑",kr:"이거 착용해봐도 되나요?",zh:"可以試戴嗎？",p:"커이 스따이 마?",py:"kěyǐ shìdài ma?"},
+{c:"쇼핑",kr:"다른 색 있나요?",zh:"有別的顏色嗎？",p:"요우 비에더 옌써 마?",py:"yǒu biéde yánsè ma?"},
+{c:"쇼핑",kr:"새 제품 있나요?",zh:"有新的嗎？",p:"요우 신더 마?",py:"yǒu xīn de ma?"},
+{c:"쇼핑",kr:"이게 마지막 제품인가요?",zh:"這是最後一個嗎？",p:"쩌스 쭈이허우 이거 마?",py:"zhè shì zuìhòu yí ge ma?"},
+
+{c:"식당",kr:"맛있어요",zh:"很好吃",p:"헌 하오츠",py:"hěn hǎochī"},
+{c:"식당",kr:"이거 하나 주세요",zh:"這個一份",p:"쩌거 이펀",py:"zhège yí fèn"},
+{c:"식당",kr:"두 개 주세요",zh:"我要兩個",p:"워 야오 량거",py:"wǒ yào liǎng ge"},
+{c:"식당",kr:"안 맵게 해주세요",zh:"不要辣",p:"부야오 라",py:"bú yào là"},
+{c:"식당",kr:"조금만 맵게",zh:"微辣",p:"웨이라",py:"wēilà"},
+{c:"식당",kr:"물 주세요",zh:"請給我水",p:"칭 게이 워 쉐이",py:"qǐng gěi wǒ shuǐ"},
+{c:"식당",kr:"맥주",zh:"啤酒",p:"피지우",py:"píjiǔ"},
+{c:"식당",kr:"포장해 주세요",zh:"請幫我打包",p:"칭 빵 워 다바오",py:"qǐng bāng wǒ dǎbāo"},
+{c:"식당",kr:"계산할게요",zh:"買單",p:"마이단",py:"mǎidān"},
+{c:"식당",kr:"두 명이에요",zh:"兩位",p:"량웨이",py:"liǎng wèi"},
+{c:"식당",kr:"예약했어요",zh:"我有訂位",p:"워 요우 띵웨이",py:"wǒ yǒu dìngwèi"},
+{c:"식당",kr:"추천 메뉴가 뭐예요?",zh:"有推薦的嗎？",p:"요우 투이지엔더 마?",py:"yǒu tuījiàn de ma?"},
+{c:"식당",kr:"고수 빼주세요",zh:"不要香菜",p:"부야오 샹차이",py:"bú yào xiāngcài"},
+{c:"식당",kr:"얼음 빼주세요",zh:"去冰",p:"취빙",py:"qù bīng"},
+{c:"식당",kr:"당도 반으로",zh:"半糖",p:"반탕",py:"bàn táng"},
+
+{c:"교통",kr:"여기로 가주세요",zh:"請到這裡",p:"칭 따오 쩌리",py:"qǐng dào zhèlǐ"},
+{c:"교통",kr:"여기서 세워주세요",zh:"這裡停，謝謝",p:"쩌리 팅, 시에시에",py:"zhèlǐ tíng, xièxie"},
+{c:"교통",kr:"타이베이역",zh:"台北車站",p:"타이베이 처잔",py:"Táiběi chēzhàn"},
+{c:"교통",kr:"공항",zh:"機場",p:"지창",py:"jīchǎng"},
+{c:"교통",kr:"호텔",zh:"飯店",p:"판디엔",py:"fàndiàn"},
+{c:"교통",kr:"MRT / 지하철",zh:"捷運",p:"지에윈",py:"jiéyùn"},
+{c:"교통",kr:"버스 정류장",zh:"公車站",p:"공처잔",py:"gōngchē zhàn"},
+{c:"교통",kr:"얼마나 걸려요?",zh:"要多久？",p:"야오 뚜어지우?",py:"yào duōjiǔ?"},
+{c:"교통",kr:"미터기 켜주세요",zh:"請跳表",p:"칭 탸오뱌오",py:"qǐng tiàobiǎo"},
+{c:"교통",kr:"이 버스 타이베이역 가나요?",zh:"這班公車到台北車站嗎？",p:"쩌반 공처 따오 타이베이 처잔 마?",py:"zhè bān gōngchē dào Táiběi chēzhàn ma?"},
+{c:"교통",kr:"이지카드 충전하고 싶어요",zh:"我要加值悠遊卡",p:"워 야오 지아즈 요우요우카",py:"wǒ yào jiāzhí Yōuyóukǎ"},
+
+{c:"장소",kr:"화장실 어디예요?",zh:"廁所在哪裡？",p:"처쒀 짜이 날리?",py:"cèsuǒ zài nǎlǐ?"},
+{c:"장소",kr:"여기",zh:"這裡",p:"쩌리",py:"zhèlǐ"},
+{c:"장소",kr:"저기",zh:"那裡",p:"나리",py:"nàlǐ"},
+{c:"장소",kr:"어디",zh:"哪裡",p:"날리",py:"nǎlǐ"},
+{c:"장소",kr:"출구",zh:"出口",p:"추커우",py:"chūkǒu"},
+{c:"장소",kr:"입구",zh:"入口",p:"루커우",py:"rùkǒu"},
+{c:"장소",kr:"편의점",zh:"便利商店",p:"비엔리 샹디엔",py:"biànlì shāngdiàn"},
+{c:"장소",kr:"엘리베이터 어디예요?",zh:"電梯在哪裡？",p:"디엔티 짜이 날리?",py:"diàntī zài nǎlǐ?"},
+{c:"장소",kr:"여기가 맞나요?",zh:"是這裡嗎？",p:"스 쩌리 마?",py:"shì zhèlǐ ma?"},
+
+{c:"긴급",kr:"도와주세요",zh:"請幫忙",p:"칭 빵망",py:"qǐng bāngmáng"},
+{c:"긴급",kr:"병원",zh:"醫院",p:"이위엔",py:"yīyuàn"},
+{c:"긴급",kr:"경찰",zh:"警察",p:"징차",py:"jǐngchá"},
+{c:"긴급",kr:"여권을 잃어버렸어요",zh:"我的護照不見了",p:"워더 후자오 부지엔 러",py:"wǒ de hùzhào bú jiàn le"},
+{c:"긴급",kr:"몸이 안 좋아요",zh:"我不舒服",p:"워 부 슈푸",py:"wǒ bù shūfu"},
+{c:"긴급",kr:"구급차 불러주세요",zh:"請叫救護車",p:"칭 지아오 지우후처",py:"qǐng jiào jiùhùchē"},
+{c:"긴급",kr:"휴대폰을 잃어버렸어요",zh:"我的手機不見了",p:"워더 쇼우지 부지엔 러",py:"wǒ de shǒujī bú jiàn le"}
+];
+
+const categories=["전체","기본","쇼핑","식당","교통","장소","긴급"];
+let active="전체";
+
+const quickItems=[
+ ["감사합니다","謝謝","시에시에"],
+ ["이거 주세요","我要這個","워 야오 쩌거"],
+ ["얼마예요?","多少錢？","뚜어샤오 치엔?"],
+ ["카드 돼요?","可以刷卡嗎？","커이 슈아카 마?"],
+ ["화장실 어디예요?","廁所在哪裡？","처쒀 짜이 날리?"],
+ ["여기서 세워주세요","這裡停，謝謝","쩌리 팅, 시에시에"]
+];
+
+function renderTabs(){
+  document.getElementById("tabs").innerHTML=categories.map(c =>
+    `<button class="tab ${c===active?'active':''}" onclick="setCategory('${c}')">${c}</button>`
+  ).join("");
+}
+function setCategory(c){active=c;renderTabs();renderList();}
+function speak(text){
+  if(!("speechSynthesis" in window)){alert("이 브라우저는 음성 읽기를 지원하지 않습니다.");return;}
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="zh-TW";u.rate=.82;
+  speechSynthesis.cancel();speechSynthesis.speak(u);
+}
+async function copyText(text){
+  try{
+    await navigator.clipboard.writeText(text);
+  }catch(e){
+    const t=document.createElement("textarea");t.value=text;document.body.appendChild(t);t.select();document.execCommand("copy");t.remove();
+  }
+}
+function phraseCard(x){
+  return `<div class="card">
+    <div class="kr">${x.kr}</div>
+    <div class="zh">${x.zh}</div>
+    <div class="pron">${x.p}</div>
+    <div class="py">${x.py}</div>
+    <div class="actions">
+      <button class="secondary" onclick='speak(${JSON.stringify(x.zh)})'>🔊 듣기</button>
+      <button class="secondary" onclick='copyText(${JSON.stringify(x.zh)})'>📋 복사</button>
+      <button class="secondary" onclick='useForTranslate(${JSON.stringify(x.kr)})'>↗ 번역창</button>
+    </div>
+  </div>`;
+}
+function renderList(){
+  const q=document.getElementById("search").value.trim().toLowerCase();
+  const arr=phrases.filter(x =>
+    (active==="전체" || x.c===active) &&
+    (!q || [x.kr,x.zh,x.p,x.py,x.c].join(" ").toLowerCase().includes(q))
+  );
+  document.getElementById("list").innerHTML=arr.length?arr.map(phraseCard).join(""):`<div class="empty">검색 결과가 없습니다.</div>`;
+}
+function useForTranslate(t){
+  document.getElementById("translateText").value=t;
+  document.getElementById("translator").scrollIntoView({behavior:"smooth"});
+}
+function getTranslationText(){
+  return document.getElementById("translateText").value.trim();
+}
+
+function isLocalLikeContext(){
+  const p = location.protocol;
+  return p === "file:" || p === "content:" || p === "blob:";
+}
+
+function setVoiceUiState(){
+  const status = document.getElementById("voiceStatus");
+  const note = document.getElementById("voiceNote");
+  const micKo = document.getElementById("micKo");
+  const micZh = document.getElementById("micZh");
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const localLike = isLocalLikeContext();
+  const secure = window.isSecureContext;
+
+  if (!SR) {
+    status.textContent = "이 브라우저는 페이지 내 음성 인식을 지원하지 않습니다.";
+    note.innerHTML = "대신 <b>‘Papago 앱/웹에서 음성번역’</b> 버튼을 사용하세요. 사전·검색·중국어 읽기는 그대로 사용할 수 있습니다.";
+    micKo.disabled = true;
+    micZh.disabled = true;
+    micKo.style.opacity = ".45";
+    micZh.style.opacity = ".45";
+    return;
+  }
+
+  if (localLike || !secure) {
+    status.textContent = "현재는 다운로드한 로컬 HTML이라 페이지 내 마이크 권한이 제한됩니다.";
+    note.innerHTML =
+      "삼성 인터넷에서 <b>content:// 또는 file://</b>로 연 HTML은 마이크가 ‘not-allowed’로 막힐 수 있습니다. " +
+      "이 경우 아래 <b>‘Papago 앱/웹에서 음성번역’</b> 버튼을 사용하세요. " +
+      "이 파일을 나중에 <b>HTTPS 주소</b>로 열면 한국어/중국어 마이크 버튼이 자동으로 활성화됩니다.";
+    micKo.disabled = true;
+    micZh.disabled = true;
+    micKo.style.opacity = ".45";
+    micZh.style.opacity = ".45";
+    return;
+  }
+
+  status.textContent = "마이크 사용 가능. 버튼을 누르면 음성을 글자로 받아 적습니다.";
+  note.innerHTML =
+    "처음 사용할 때 브라우저의 마이크 권한을 <b>허용</b>해 주세요. " +
+    "인식된 문장은 Papago 또는 Google 번역으로 바로 보낼 수 있습니다.";
+}
+
+function openPapago(){
+  const t=getTranslationText();
+  if(!t){alert("먼저 문장을 입력하거나 말해 주세요.");return;}
+  copyText(t);
+  const url="https://papago.naver.com/?sk=ko&tk=zh-TW&st="+encodeURIComponent(t);
+  window.open(url,"_blank");
+}
+
+function openGoogle(){
+  const t=getTranslationText();
+  if(!t){alert("먼저 문장을 입력하거나 말해 주세요.");return;}
+  const url="https://translate.google.com/?sl=ko&tl=zh-TW&text="+encodeURIComponent(t)+"&op=translate";
+  window.open(url,"_blank");
+}
+
+function openPapagoHome(){
+  const t = getTranslationText();
+  if(t) copyText(t);
+  const url = t
+    ? "https://papago.naver.com/?sk=ko&tk=zh-TW&st="+encodeURIComponent(t)
+    : "https://papago.naver.com/";
+  window.open(url, "_blank");
+}
+
+function copyTranslateText(){
+  const t=getTranslationText();
+  if(!t){alert("복사할 문장이 없습니다.");return;}
+  copyText(t);
+}
+
+function startVoice(lang){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  const status=document.getElementById("voiceStatus");
+
+  if(isLocalLikeContext() || !window.isSecureContext){
+    status.textContent="로컬 파일에서는 마이크 권한이 제한됩니다. ‘Papago 앱/웹에서 음성번역’을 사용해 주세요.";
+    return;
+  }
+
+  if(!SR){
+    status.textContent="이 브라우저는 음성 인식을 지원하지 않습니다. Papago 음성번역을 사용해 주세요.";
+    return;
+  }
+
+  const rec=new SR();
+  rec.lang=lang;
+  rec.interimResults=true;
+  rec.continuous=false;
+  rec.maxAlternatives=1;
+
+  status.textContent=lang==="ko-KR"?"🎙️ 한국어 듣는 중…":"🎙️ 중국어 듣는 중…";
+
+  rec.onresult=(e)=>{
+    let txt="";
+    for(let i=e.resultIndex;i<e.results.length;i++) txt+=e.results[i][0].transcript;
+    document.getElementById("translateText").value=txt;
+    status.textContent=e.results[e.results.length-1].isFinal
+      ? "인식 완료. 번역 버튼을 눌러 주세요."
+      : "듣는 중…";
+  };
+
+  rec.onerror=(e)=>{
+    if(e.error==="not-allowed" || e.error==="service-not-allowed"){
+      status.textContent="마이크 권한이 차단되었습니다. 브라우저 사이트 권한에서 마이크를 허용하거나 Papago 음성번역을 사용해 주세요.";
+    } else if(e.error==="no-speech"){
+      status.textContent="음성이 감지되지 않았습니다. 다시 눌러 말해 주세요.";
+    } else {
+      status.textContent="음성 인식 오류: "+e.error;
+    }
+  };
+
+  rec.onend=()=>{
+    if(status.textContent.includes("듣는 중")) status.textContent="음성 인식이 끝났습니다.";
+  };
+
+  try{
+    rec.start();
+  }catch(err){
+    status.textContent="음성 인식을 시작하지 못했습니다. Papago 음성번역을 사용해 주세요.";
+  }
+}
+
+document.getElementById("search").addEventListener("input",renderList);
+document.getElementById("quick").innerHTML=quickItems.map(a =>
+ `<button onclick='speak(${JSON.stringify(a[1])})'><b>${a[0]}</b><span>${a[2]} · 🔊</span></button>`
+).join("");
+
+renderTabs();
+renderList();
+setVoiceUiState();
+</script>
+</body>
+</html>
