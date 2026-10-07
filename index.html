@@ -2,156 +2,240 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0f172a">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#152a43">
+<meta name="color-scheme" content="light">
 <title>대만 여행 미니 사전</title>
 <style>
-:root{
-  --bg:#f5f6f8; --card:#fff; --text:#111827; --muted:#6b7280; --line:#e5e7eb;
-  --green:#0f766e; --green2:#ecfdf5; --navy:#0f172a; --orange:#fff7ed;
+:root {
+  --ink:#162033; --muted:#738095; --paper:#f5f2ea; --card:#fffdf9; --line:#e7e0d4;
+  --jade:#19766c; --jade2:#e6f4ef; --navy:#152a43; --navy2:#243f5f;
+  --red:#c64d47; --red2:#fff0ee; --gold:#b68a43; --shadow:0 10px 30px rgba(26,36,49,.08);
+  --radius:22px;
 }
-*{box-sizing:border-box}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
 body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Roboto,Arial,sans-serif;
+  margin:0;color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR","Apple SD Gothic Neo",Roboto,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 100% -10%, rgba(25,118,108,.12), transparent 34%),
+    radial-gradient(circle at -10% 18%, rgba(182,138,67,.09), transparent 28%),
+    var(--paper);
 }
-.app{max-width:760px;margin:0 auto;padding:0 14px 100px}
-header{
-  position:sticky;top:0;z-index:30;
-  background:rgba(245,246,248,.95);backdrop-filter:blur(14px);
-  padding:12px 0 9px;border-bottom:1px solid var(--line)
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.shell{max-width:760px;margin:auto;padding:0 14px 108px}
+.safe{height:max(8px,env(safe-area-inset-top))}
+
+.hero{
+  margin:8px 0 14px;padding:19px 18px 17px;border-radius:28px;color:#fff;
+  background:linear-gradient(145deg,var(--navy),#264b67 58%,#1b756d);
+  box-shadow:0 16px 38px rgba(21,42,67,.22);position:relative;overflow:hidden
 }
-.head{display:flex;align-items:center;justify-content:space-between;gap:10px}
-h1{font-size:21px;margin:0}
-.subtitle{font-size:12px;color:var(--muted);margin-top:3px}
-.offline{font-size:11px;font-weight:800;background:var(--green2);color:var(--green);padding:6px 8px;border-radius:999px}
-.search{margin-top:10px}
-input,textarea{
-  width:100%;border:1px solid #d7dbe1;background:#fff;border-radius:15px;
-  font-size:16px;padding:13px 14px;outline:none;color:var(--text)
+.hero:before{content:"";position:absolute;width:170px;height:170px;border:1px solid rgba(255,255,255,.12);border-radius:50%;right:-48px;top:-72px}
+.hero:after{content:"臺";position:absolute;right:16px;bottom:-24px;font:900 112px/1 serif;color:rgba(255,255,255,.055)}
+.eyebrow{font-size:11px;letter-spacing:.16em;opacity:.72;font-weight:800}
+.hero h1{font-size:26px;margin:6px 0 5px;letter-spacing:-.04em}
+.hero p{font-size:13px;margin:0;opacity:.82}
+.heroRow{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.onlinePill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:7px 9px;border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap}
+
+.sticky{
+  position:sticky;top:0;z-index:25;margin:0 -14px;padding:9px 14px 8px;
+  background:rgba(245,242,234,.90);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(231,224,212,.75)
 }
-input:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(15,118,110,.1)}
-.tabs{display:flex;overflow:auto;gap:7px;padding:10px 0 2px;scrollbar-width:none}
+.searchWrap{position:relative}
+.searchIcon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;opacity:.55}
+#search{
+  width:100%;padding:13px 42px 13px 40px;border-radius:17px;border:1px solid var(--line);
+  background:rgba(255,253,249,.96);outline:0;color:var(--ink);font-size:15px;
+  box-shadow:0 3px 12px rgba(40,45,52,.035)
+}
+#search:focus{border-color:#97c6bd;box-shadow:0 0 0 4px rgba(25,118,108,.08)}
+.clearSearch{position:absolute;right:9px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:var(--muted);font-size:18px;padding:6px}
+.tabs{display:flex;overflow:auto;gap:7px;margin-top:9px;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab{
-  white-space:nowrap;border:1px solid #d7dbe1;background:#fff;border-radius:999px;
-  padding:8px 12px;font-size:13px;font-weight:700
+.tab{border:1px solid var(--line);background:var(--card);color:#465267;padding:8px 12px;border-radius:999px;font-size:13px;font-weight:800;white-space:nowrap}
+.tab.active{background:var(--navy);border-color:var(--navy);color:#fff}
+
+.sectionHead{display:flex;align-items:end;justify-content:space-between;margin:20px 2px 10px}
+.sectionHead h2{font-size:17px;margin:0;letter-spacing:-.02em}
+.sectionHead span{font-size:11px;color:var(--muted)}
+
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.quickCard{
+  position:relative;text-align:left;border:1px solid var(--line);background:var(--card);
+  border-radius:19px;padding:13px 13px 12px;color:var(--ink);min-height:96px;box-shadow:0 5px 16px rgba(34,44,56,.045)
 }
-.tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
-.title{font-size:16px;font-weight:900;margin:18px 2px 9px}
-.card{
-  background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;margin:9px 0;
-  box-shadow:0 1px 2px rgba(0,0,0,.025)
+.quickCard:active{transform:scale(.985)}
+.quickCard .qkr{font-size:13px;font-weight:850}
+.quickCard .qzh{font-size:20px;font-weight:900;margin-top:5px;letter-spacing:.01em}
+.quickCard .qpron{font-size:11px;color:var(--jade);font-weight:800;margin-top:4px}
+.quickCard .playDot{position:absolute;right:10px;bottom:10px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--jade2);color:var(--jade)}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:15px;box-shadow:var(--shadow)}
+.modeSwitch{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:9px;margin-bottom:10px}
+.langChip{background:#f2f5f6;border:1px solid #e3e8e8;border-radius:14px;padding:10px;font-size:13px;font-weight:850;text-align:center}
+.swapBtn{border:0;background:var(--jade2);color:var(--jade);border-radius:50%;width:36px;height:36px;font-size:17px}
+textarea{width:100%;min-height:104px;resize:vertical;border:1px solid var(--line);border-radius:17px;padding:13px;background:#fff;color:var(--ink);outline:0;font-size:16px;line-height:1.5}
+textarea:focus{border-color:#97c6bd;box-shadow:0 0 0 4px rgba(25,118,108,.08)}
+.micGrid,.actionGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:14px;padding:12px 10px;font-size:13px;font-weight:850}
+.btnJade{background:var(--jade);color:#fff}
+.btnNavy{background:var(--navy);color:#fff}
+.btnSoft{background:#eef2f5;color:#243247}
+.btnWarm{background:#fff0dc;color:#8c5e20}
+.status{font-size:12px;color:var(--muted);margin:10px 2px 0;line-height:1.45}
+.microNote{font-size:11px;color:#8a6b46;background:#fff7e8;padding:9px 10px;border-radius:12px;margin-top:8px;line-height:1.45}
+
+.hotelCard{padding:0;overflow:hidden}
+.hotelTop{background:linear-gradient(135deg,#eef7f4,#fbfaf6);padding:15px}
+.hotelLabel{font-size:11px;color:var(--jade);font-weight:900;letter-spacing:.08em}
+.hotelName{font-size:18px;font-weight:900;margin-top:5px}
+.hotelCn{font-size:20px;font-weight:900;margin-top:7px}
+.hotelAddr{font-size:14px;color:#546174;margin-top:5px;line-height:1.45}
+.hotelActions{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--line)}
+.hotelActions button{border:0;border-right:1px solid var(--line);background:var(--card);padding:11px 6px;font-size:12px;font-weight:800;color:#3f4b5d}
+.hotelActions button:last-child{border-right:0}
+
+.favBar{display:none;background:linear-gradient(135deg,#fff8e8,#fffdf9);border:1px solid #eddcb9;border-radius:18px;padding:12px;margin:10px 0}
+.favBar.show{display:block}
+.favTitle{font-size:12px;font-weight:900;color:#805f27;margin-bottom:7px}
+.favTags{display:flex;gap:6px;overflow:auto;scrollbar-width:none}
+.favTag{white-space:nowrap;border:1px solid #ecd9af;background:#fff;border-radius:999px;padding:7px 10px;font-size:12px}
+
+.phraseList{display:grid;gap:9px}
+.phraseCard{
+  border:1px solid var(--line);background:var(--card);border-radius:20px;padding:14px;
+  box-shadow:0 5px 18px rgba(33,42,54,.045);position:relative
 }
-.kr{font-size:15px;font-weight:800}
-.zh{font-size:23px;font-weight:900;margin-top:5px;letter-spacing:.2px}
-.pron{font-size:15px;font-weight:800;color:var(--green);margin-top:3px}
-.py{font-size:12px;color:var(--muted);margin-top:2px}
-.actions{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
-button{
-  border:0;border-radius:12px;padding:10px 12px;font-size:14px;font-weight:800;cursor:pointer
+.catPill{display:inline-flex;font-size:10px;font-weight:900;color:var(--jade);background:var(--jade2);padding:5px 7px;border-radius:999px}
+.phraseCard.emergency .catPill{color:var(--red);background:var(--red2)}
+.phraseCard .kr{font-size:14px;font-weight:850;margin-top:8px}
+.phraseCard .zh{font-size:25px;font-weight:950;letter-spacing:.015em;margin-top:4px;line-height:1.2}
+.phraseCard .pron{font-size:14px;color:var(--jade);font-weight:850;margin-top:5px}
+.phraseCard .py{font-size:11px;color:var(--muted);margin-top:2px}
+.cardActions{display:flex;gap:7px;margin-top:12px}
+.iconBtn{border:0;background:#f0f3f5;color:#2d3a4c;border-radius:12px;padding:9px 11px;font-size:12px;font-weight:850}
+.starBtn{position:absolute;right:10px;top:10px;border:0;background:transparent;font-size:19px;color:#c3bdaf;padding:6px}
+.starBtn.on{color:var(--gold)}
+
+.empty{text-align:center;color:var(--muted);padding:40px 0}
+.toast{position:fixed;left:50%;bottom:92px;transform:translate(-50%,18px);background:#172234;color:#fff;padding:10px 14px;border-radius:999px;font-size:12px;font-weight:800;opacity:0;pointer-events:none;transition:.22s;z-index:80}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+.bottomNav{
+  position:fixed;z-index:60;left:50%;transform:translateX(-50%);bottom:max(10px,env(safe-area-inset-bottom));
+  width:min(94%,720px);display:grid;grid-template-columns:repeat(4,1fr);
+  background:rgba(21,42,67,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.1);border-radius:21px;padding:7px;box-shadow:0 14px 34px rgba(19,31,48,.28)
 }
-.secondary{background:#f1f5f9;color:#111827}
-.dark{background:var(--navy);color:#fff}
-.green{background:var(--green);color:#fff}
-.orange{background:#ffedd5;color:#9a3412}
-.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.quick button{
-  text-align:left;background:#fff;border:1px solid var(--line);padding:11px
-}
-.quick b{display:block;font-size:14px}
-.quick span{display:block;font-size:12px;color:var(--muted);margin-top:4px}
-.translator{
-  background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px
-}
-textarea{min-height:95px;resize:vertical}
-.toolbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-.microw{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-.mic{padding:13px 10px}
-.status{font-size:12px;color:var(--muted);margin-top:9px;min-height:18px}
-.note{
-  margin-top:10px;background:var(--orange);color:#7c2d12;border-radius:12px;
-  padding:10px 12px;font-size:12px;line-height:1.5
-}
-.hotel{
-  background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;margin-top:10px
-}
-.hotel .cn{font-weight:900;font-size:18px;margin-top:5px}
-.hotel .addr{font-size:16px;margin-top:6px}
-.empty{text-align:center;color:var(--muted);padding:30px 0}
-.fab{
-  position:fixed;right:16px;bottom:18px;z-index:40;
-  background:var(--navy);color:#fff;text-decoration:none;padding:13px 16px;
-  border-radius:999px;font-weight:900;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.25)
-}
+.bottomNav button{border:0;background:transparent;color:#cbd6df;border-radius:15px;padding:8px 3px;font-size:10px;font-weight:800}
+.bottomNav b{display:block;font-size:18px;margin-bottom:2px}
+.bottomNav button:active{background:rgba(255,255,255,.08)}
+
 @media(min-width:620px){
- .quick{grid-template-columns:repeat(3,1fr)}
+  .quick{grid-template-columns:repeat(3,1fr)}
+  .phraseList{grid-template-columns:1fr 1fr}
 }
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 </style>
 </head>
 <body>
-<div class="app">
-<header>
-  <div class="head">
+<div class="shell">
+<div class="safe"></div>
+
+<section class="hero" id="home">
+  <div class="heroRow">
     <div>
-      <h1>🇹🇼 대만 여행 미니 사전</h1>
-      <div class="subtitle">번체중국어 · 한국식 발음 · 듣기 · 음성입력</div>
+      <div class="eyebrow">TAIPEI POCKET PHRASES</div>
+      <h1>대만 여행 미니 사전</h1>
+      <p>보여주고 · 들려주고 · 바로 말하기</p>
     </div>
-    <div class="offline">사전 오프라인</div>
+    <div class="onlinePill" id="netPill">● ONLINE</div>
   </div>
-  <div class="search"><input id="search" placeholder="예: 카드, 화장실, 택시, 물, 할인…"></div>
+</section>
+
+<div class="sticky" id="dictionary">
+  <div class="searchWrap">
+    <span class="searchIcon">⌕</span>
+    <input id="search" placeholder="카드, 화장실, 택시, 할인…">
+    <button class="clearSearch" onclick="clearSearch()" aria-label="검색 지우기">×</button>
+  </div>
   <div class="tabs" id="tabs"></div>
-</header>
-
-<div class="title">⭐ 자주 쓰는 표현</div>
-<div class="quick" id="quick"></div>
-
-<div class="title" id="translator">🎙️ 말해서 번역</div>
-<div class="translator">
-  <textarea id="translateText" placeholder="직접 입력하거나 아래 마이크를 눌러 말하세요."></textarea>
-
-  <div class="microw">
-    <button id="micKo" class="green mic" onclick="startVoice('ko-KR')">🎙️ 한국어 말하기</button>
-    <button id="micZh" class="orange mic" onclick="startVoice('zh-TW')">🎙️ 중국어 듣기</button>
-  </div>
-
-  <div class="toolbar">
-    <button class="dark" onclick="openPapago()">Papago 번역</button>
-    <button class="secondary" onclick="openGoogle()">Google 번역</button>
-  </div>
-
-  <div class="toolbar">
-    <button class="secondary" onclick="openPapagoHome()">🎙️ Papago 앱/웹에서 음성번역</button>
-    <button class="secondary" onclick="copyTranslateText()">📋 입력문 복사</button>
-  </div>
-
-  <div class="status" id="voiceStatus">마이크 기능 확인 중…</div>
-  <div class="note" id="voiceNote">
-    기본 사전과 발음 표시는 오프라인에서도 사용할 수 있습니다.
-    자유문장 번역은 Papago 또는 Google 번역을 새 창으로 엽니다.
-  </div>
 </div>
 
-<div class="title">🏨 숙소 바로 보여주기</div>
-<div class="hotel">
-  <div>Via Hotel Taipei Station</div>
-  <div class="cn">丰居旅店 北車館</div>
-  <div class="addr">台北市中正區重慶南路一段60號</div>
-  <div class="actions">
-    <button class="secondary" onclick="copyText('丰居旅店 北車館\n台北市中正區重慶南路一段60號')">📋 주소 복사</button>
-    <button class="secondary" onclick="speak('丰居旅店 北車館，台北市中正區重慶南路一段60號')">🔊 읽기</button>
+<section>
+  <div class="sectionHead"><h2>자주 쓰는 표현</h2><span>눌러서 바로 듣기</span></div>
+  <div class="quick" id="quick"></div>
+</section>
+
+<section>
+  <div class="sectionHead"><h2>즐겨찾기</h2><span>별표한 표현</span></div>
+  <div id="favBar" class="favBar">
+    <div class="favTitle">⭐ 저장한 표현</div>
+    <div id="favTags" class="favTags"></div>
   </div>
+</section>
+
+<section id="translator">
+  <div class="sectionHead"><h2>말해서 번역</h2><span>한국어 ↔ 번체중국어</span></div>
+  <div class="panel">
+    <div class="modeSwitch">
+      <div class="langChip" id="fromLabel">🇰🇷 한국어</div>
+      <button class="swapBtn" onclick="swapLangs()" aria-label="언어 바꾸기">⇄</button>
+      <div class="langChip" id="toLabel">🇹🇼 中文</div>
+    </div>
+    <textarea id="translateText" placeholder="직접 입력하거나 마이크를 눌러 말하세요."></textarea>
+    <div class="micGrid">
+      <button id="micPrimary" class="btn btnJade" onclick="startVoice(currentLang)">🎙️ 말하기</button>
+      <button class="btn btnWarm" onclick="speakTyped()">🔊 입력문 읽기</button>
+    </div>
+    <div class="actionGrid">
+      <button class="btn btnNavy" onclick="openPapago()">Papago 번역</button>
+      <button class="btn btnSoft" onclick="openGoogle()">Google 번역</button>
+    </div>
+    <div class="status" id="voiceStatus">마이크 기능 확인 중…</div>
+    <div class="microNote" id="voiceNote">처음 사용할 때 브라우저의 마이크 권한을 허용해 주세요.</div>
+  </div>
+</section>
+
+<section id="hotel">
+  <div class="sectionHead"><h2>숙소 바로 보여주기</h2><span>택시에서 이 화면</span></div>
+  <div class="panel hotelCard">
+    <div class="hotelTop">
+      <div class="hotelLabel">VIA HOTEL · TAIPEI STATION</div>
+      <div class="hotelName">Via Hotel Taipei Station</div>
+      <div class="hotelCn">丰居旅店 北車館</div>
+      <div class="hotelAddr">台北市中正區重慶南路一段60號</div>
+    </div>
+    <div class="hotelActions">
+      <button onclick="copyHotel()">📋 주소복사</button>
+      <button onclick="speak('丰居旅店 北車館，台北市中正區重慶南路一段60號')">🔊 읽기</button>
+      <button onclick="openHotelMap()">🗺️ 지도</button>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sectionHead"><h2>표현 모음</h2><span id="countLabel"></span></div>
+  <div id="list" class="phraseList"></div>
+</section>
 </div>
 
-<div class="title">📖 표현 모음</div>
-<div id="list"></div>
-
-<a class="fab" href="#translator">🎙️ 번역</a>
+<div class="bottomNav">
+  <button onclick="go('home')"><b>⌂</b>홈</button>
+  <button onclick="go('dictionary')"><b>⌕</b>사전</button>
+  <button onclick="go('translator')"><b>◉</b>번역</button>
+  <button onclick="go('hotel')"><b>⌖</b>숙소</button>
 </div>
+<div id="toast" class="toast">복사했어요</div>
 
 <script>
 const phrases = [
+
 {c:"기본",kr:"안녕하세요",zh:"你好",p:"니 하오",py:"nǐ hǎo"},
 {c:"기본",kr:"감사합니다",zh:"謝謝",p:"시에시에",py:"xièxie"},
 {c:"기본",kr:"죄송합니다 / 미안합니다",zh:"對不起",p:"뚜이부치",py:"duìbuqǐ"},
@@ -227,199 +311,148 @@ const phrases = [
 ];
 
 const categories=["전체","기본","쇼핑","식당","교통","장소","긴급"];
-let active="전체";
-
 const quickItems=[
- ["감사합니다","謝謝","시에시에"],
- ["이거 주세요","我要這個","워 야오 쩌거"],
- ["얼마예요?","多少錢？","뚜어샤오 치엔?"],
- ["카드 돼요?","可以刷卡嗎？","커이 슈아카 마?"],
- ["화장실 어디예요?","廁所在哪裡？","처쒀 짜이 날리?"],
- ["여기서 세워주세요","這裡停，謝謝","쩌리 팅, 시에시에"]
+  ["감사합니다","謝謝","시에시에"],
+  ["이거 주세요","我要這個","워 야오 쩌거"],
+  ["얼마예요?","多少錢？","뚜어샤오 치엔?"],
+  ["카드 돼요?","可以刷卡嗎？","커이 슈아카 마?"],
+  ["화장실 어디예요?","廁所在哪裡？","처쒀 짜이 날리?"],
+  ["여기서 세워주세요","這裡停，謝謝","쩌리 팅, 시에시에"]
 ];
 
+let active="전체";
+let currentLang="ko-KR";
+let favorites=new Set(JSON.parse(localStorage.getItem("tw-favorites")||"[]"));
+
+function go(id){document.getElementById(id)?.scrollIntoView({behavior:"smooth",block:"start"})}
+function toast(msg){
+  const el=document.getElementById("toast");el.textContent=msg;el.classList.add("show");
+  clearTimeout(window.__toast);window.__toast=setTimeout(()=>el.classList.remove("show"),1300);
+}
+function updateNet(){
+  const p=document.getElementById("netPill");
+  const on=navigator.onLine;p.textContent=on?"● ONLINE":"● OFFLINE";p.style.opacity=on?"1":".65";
+}
+addEventListener("online",updateNet);addEventListener("offline",updateNet);
+
 function renderTabs(){
-  document.getElementById("tabs").innerHTML=categories.map(c =>
-    `<button class="tab ${c===active?'active':''}" onclick="setCategory('${c}')">${c}</button>`
+  document.getElementById("tabs").innerHTML=categories.map(c=>
+    `<button class="tab ${c===active?"active":""}" onclick="setCategory('${c}')">${c}</button>`
   ).join("");
 }
 function setCategory(c){active=c;renderTabs();renderList();}
-function speak(text){
-  if(!("speechSynthesis" in window)){alert("이 브라우저는 음성 읽기를 지원하지 않습니다.");return;}
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang="zh-TW";u.rate=.82;
+function clearSearch(){document.getElementById("search").value="";renderList();document.getElementById("search").focus()}
+
+function speak(text,lang="zh-TW"){
+  if(!("speechSynthesis" in window)){toast("음성 읽기를 지원하지 않아요");return}
+  const u=new SpeechSynthesisUtterance(text);u.lang=lang;u.rate=.82;
   speechSynthesis.cancel();speechSynthesis.speak(u);
 }
-async function copyText(text){
-  try{
-    await navigator.clipboard.writeText(text);
-  }catch(e){
+async function copyText(text,msg="복사했어요"){
+  try{await navigator.clipboard.writeText(text)}catch(e){
     const t=document.createElement("textarea");t.value=text;document.body.appendChild(t);t.select();document.execCommand("copy");t.remove();
   }
+  toast(msg);
 }
-function phraseCard(x){
-  return `<div class="card">
+function copyHotel(){copyText("丰居旅店 北車館\n台北市中正區重慶南路一段60號","숙소 주소를 복사했어요")}
+function openHotelMap(){window.open("https://www.google.com/maps/search/?api=1&query="+encodeURIComponent("丰居旅店 北車館 台北市中正區重慶南路一段60號"),"_blank")}
+
+function toggleFav(i){
+  if(favorites.has(i)) favorites.delete(i); else favorites.add(i);
+  localStorage.setItem("tw-favorites",JSON.stringify([...favorites]));
+  renderList();renderFavorites();
+}
+function renderFavorites(){
+  const bar=document.getElementById("favBar"),tags=document.getElementById("favTags");
+  const ids=[...favorites].filter(i=>phrases[i]);
+  bar.classList.toggle("show",ids.length>0);
+  tags.innerHTML=ids.map(i=>`<button class="favTag" onclick='speak(${JSON.stringify(phrases[i].zh)})'>${phrases[i].kr}</button>`).join("");
+}
+function phraseCard(x,i){
+  const fav=favorites.has(i);
+  return `<article class="phraseCard ${x.c==="긴급"?"emergency":""}">
+    <button class="starBtn ${fav?"on":""}" onclick="toggleFav(${i})" aria-label="즐겨찾기">${fav?"★":"☆"}</button>
+    <span class="catPill">${x.c}</span>
     <div class="kr">${x.kr}</div>
     <div class="zh">${x.zh}</div>
     <div class="pron">${x.p}</div>
     <div class="py">${x.py}</div>
-    <div class="actions">
-      <button class="secondary" onclick='speak(${JSON.stringify(x.zh)})'>🔊 듣기</button>
-      <button class="secondary" onclick='copyText(${JSON.stringify(x.zh)})'>📋 복사</button>
-      <button class="secondary" onclick='useForTranslate(${JSON.stringify(x.kr)})'>↗ 번역창</button>
+    <div class="cardActions">
+      <button class="iconBtn" onclick='speak(${JSON.stringify(x.zh)})'>🔊 듣기</button>
+      <button class="iconBtn" onclick='copyText(${JSON.stringify(x.zh)})'>📋 복사</button>
+      <button class="iconBtn" onclick='putTranslate(${JSON.stringify(x.kr)})'>↗ 번역</button>
     </div>
-  </div>`;
+  </article>`;
 }
 function renderList(){
   const q=document.getElementById("search").value.trim().toLowerCase();
-  const arr=phrases.filter(x =>
-    (active==="전체" || x.c===active) &&
-    (!q || [x.kr,x.zh,x.p,x.py,x.c].join(" ").toLowerCase().includes(q))
+  const arr=phrases.map((x,i)=>({x,i})).filter(o=>
+    (active==="전체"||o.x.c===active)&&(!q||[o.x.kr,o.x.zh,o.x.p,o.x.py,o.x.c].join(" ").toLowerCase().includes(q))
   );
-  document.getElementById("list").innerHTML=arr.length?arr.map(phraseCard).join(""):`<div class="empty">검색 결과가 없습니다.</div>`;
+  document.getElementById("countLabel").textContent=`${arr.length}개`;
+  document.getElementById("list").innerHTML=arr.length?arr.map(o=>phraseCard(o.x,o.i)).join(""):`<div class="empty">검색 결과가 없어요.</div>`;
 }
-function useForTranslate(t){
-  document.getElementById("translateText").value=t;
-  document.getElementById("translator").scrollIntoView({behavior:"smooth"});
+function putTranslate(t){document.getElementById("translateText").value=t;currentLang="ko-KR";syncLangUi();go("translator")}
+
+document.getElementById("quick").innerHTML=quickItems.map(a=>`
+  <button class="quickCard" onclick='speak(${JSON.stringify(a[1])})'>
+    <div class="qkr">${a[0]}</div><div class="qzh">${a[1]}</div><div class="qpron">${a[2]}</div><span class="playDot">▶</span>
+  </button>`).join("");
+
+function syncLangUi(){
+  const ko=currentLang==="ko-KR";
+  document.getElementById("fromLabel").textContent=ko?"🇰🇷 한국어":"🇹🇼 中文";
+  document.getElementById("toLabel").textContent=ko?"🇹🇼 中文":"🇰🇷 한국어";
+  document.getElementById("micPrimary").textContent=ko?"🎙️ 한국어 말하기":"🎙️ 중국어 말하기";
 }
-function getTranslationText(){
-  return document.getElementById("translateText").value.trim();
+function swapLangs(){currentLang=currentLang==="ko-KR"?"zh-TW":"ko-KR";syncLangUi()}
+function getT(){return document.getElementById("translateText").value.trim()}
+function speakTyped(){
+  const t=getT();if(!t){toast("먼저 문장을 입력해 주세요");return}
+  speak(t,currentLang);
 }
-
-function isLocalLikeContext(){
-  const p = location.protocol;
-  return p === "file:" || p === "content:" || p === "blob:";
-}
-
-function setVoiceUiState(){
-  const status = document.getElementById("voiceStatus");
-  const note = document.getElementById("voiceNote");
-  const micKo = document.getElementById("micKo");
-  const micZh = document.getElementById("micZh");
-
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const localLike = isLocalLikeContext();
-  const secure = window.isSecureContext;
-
-  if (!SR) {
-    status.textContent = "이 브라우저는 페이지 내 음성 인식을 지원하지 않습니다.";
-    note.innerHTML = "대신 <b>‘Papago 앱/웹에서 음성번역’</b> 버튼을 사용하세요. 사전·검색·중국어 읽기는 그대로 사용할 수 있습니다.";
-    micKo.disabled = true;
-    micZh.disabled = true;
-    micKo.style.opacity = ".45";
-    micZh.style.opacity = ".45";
-    return;
-  }
-
-  if (localLike || !secure) {
-    status.textContent = "현재는 다운로드한 로컬 HTML이라 페이지 내 마이크 권한이 제한됩니다.";
-    note.innerHTML =
-      "삼성 인터넷에서 <b>content:// 또는 file://</b>로 연 HTML은 마이크가 ‘not-allowed’로 막힐 수 있습니다. " +
-      "이 경우 아래 <b>‘Papago 앱/웹에서 음성번역’</b> 버튼을 사용하세요. " +
-      "이 파일을 나중에 <b>HTTPS 주소</b>로 열면 한국어/중국어 마이크 버튼이 자동으로 활성화됩니다.";
-    micKo.disabled = true;
-    micZh.disabled = true;
-    micKo.style.opacity = ".45";
-    micZh.style.opacity = ".45";
-    return;
-  }
-
-  status.textContent = "마이크 사용 가능. 버튼을 누르면 음성을 글자로 받아 적습니다.";
-  note.innerHTML =
-    "처음 사용할 때 브라우저의 마이크 권한을 <b>허용</b>해 주세요. " +
-    "인식된 문장은 Papago 또는 Google 번역으로 바로 보낼 수 있습니다.";
-}
-
 function openPapago(){
-  const t=getTranslationText();
-  if(!t){alert("먼저 문장을 입력하거나 말해 주세요.");return;}
-  copyText(t);
-  const url="https://papago.naver.com/?sk=ko&tk=zh-TW&st="+encodeURIComponent(t);
-  window.open(url,"_blank");
+  const t=getT();if(!t){toast("먼저 문장을 입력해 주세요");return}
+  const ko=currentLang==="ko-KR";
+  copyText(t,"입력문도 복사했어요");
+  window.open(`https://papago.naver.com/?sk=${ko?"ko":"zh-TW"}&tk=${ko?"zh-TW":"ko"}&st=${encodeURIComponent(t)}`,"_blank");
 }
-
 function openGoogle(){
-  const t=getTranslationText();
-  if(!t){alert("먼저 문장을 입력하거나 말해 주세요.");return;}
-  const url="https://translate.google.com/?sl=ko&tl=zh-TW&text="+encodeURIComponent(t)+"&op=translate";
-  window.open(url,"_blank");
+  const t=getT();if(!t){toast("먼저 문장을 입력해 주세요");return}
+  const ko=currentLang==="ko-KR";
+  window.open(`https://translate.google.com/?sl=${ko?"ko":"zh-TW"}&tl=${ko?"zh-TW":"ko"}&text=${encodeURIComponent(t)}&op=translate`,"_blank");
 }
 
-function openPapagoHome(){
-  const t = getTranslationText();
-  if(t) copyText(t);
-  const url = t
-    ? "https://papago.naver.com/?sk=ko&tk=zh-TW&st="+encodeURIComponent(t)
-    : "https://papago.naver.com/";
-  window.open(url, "_blank");
+function isLocalLike(){return ["file:","content:","blob:"].includes(location.protocol)}
+function setVoiceUi(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  const s=document.getElementById("voiceStatus"),n=document.getElementById("voiceNote"),b=document.getElementById("micPrimary");
+  if(!SR){s.textContent="이 브라우저는 페이지 내 음성 인식을 지원하지 않습니다.";n.textContent="Papago 또는 Google 번역의 음성 입력을 이용해 주세요.";b.disabled=true;b.style.opacity=".45";return}
+  if(isLocalLike()||!window.isSecureContext){s.textContent="로컬 파일에서는 마이크 권한이 제한됩니다.";n.textContent="GitHub Pages의 HTTPS 주소로 열면 음성 입력이 활성화됩니다.";b.disabled=true;b.style.opacity=".45";return}
+  s.textContent="마이크 사용 가능 · 처음 한 번 권한을 허용해 주세요.";
+  n.textContent="음성 인식 결과는 입력창에 들어갑니다. 이후 Papago/Google 번역을 눌러 주세요.";
 }
-
-function copyTranslateText(){
-  const t=getTranslationText();
-  if(!t){alert("복사할 문장이 없습니다.");return;}
-  copyText(t);
-}
-
 function startVoice(lang){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  const status=document.getElementById("voiceStatus");
-
-  if(isLocalLikeContext() || !window.isSecureContext){
-    status.textContent="로컬 파일에서는 마이크 권한이 제한됩니다. ‘Papago 앱/웹에서 음성번역’을 사용해 주세요.";
-    return;
-  }
-
-  if(!SR){
-    status.textContent="이 브라우저는 음성 인식을 지원하지 않습니다. Papago 음성번역을 사용해 주세요.";
-    return;
-  }
-
-  const rec=new SR();
-  rec.lang=lang;
-  rec.interimResults=true;
-  rec.continuous=false;
-  rec.maxAlternatives=1;
-
-  status.textContent=lang==="ko-KR"?"🎙️ 한국어 듣는 중…":"🎙️ 중국어 듣는 중…";
-
-  rec.onresult=(e)=>{
-    let txt="";
-    for(let i=e.resultIndex;i<e.results.length;i++) txt+=e.results[i][0].transcript;
+  const s=document.getElementById("voiceStatus");
+  if(!SR||isLocalLike()||!window.isSecureContext){s.textContent="현재 환경에서는 페이지 내 음성 입력을 사용할 수 없습니다.";return}
+  const rec=new SR();rec.lang=lang;rec.interimResults=true;rec.continuous=false;rec.maxAlternatives=1;
+  s.textContent="🎙️ 듣는 중…";
+  rec.onresult=e=>{
+    let txt="";for(let i=e.resultIndex;i<e.results.length;i++)txt+=e.results[i][0].transcript;
     document.getElementById("translateText").value=txt;
-    status.textContent=e.results[e.results.length-1].isFinal
-      ? "인식 완료. 번역 버튼을 눌러 주세요."
-      : "듣는 중…";
+    s.textContent=e.results[e.results.length-1].isFinal?"인식 완료 · 번역 버튼을 눌러 주세요.":"🎙️ 듣는 중…";
   };
-
-  rec.onerror=(e)=>{
-    if(e.error==="not-allowed" || e.error==="service-not-allowed"){
-      status.textContent="마이크 권한이 차단되었습니다. 브라우저 사이트 권한에서 마이크를 허용하거나 Papago 음성번역을 사용해 주세요.";
-    } else if(e.error==="no-speech"){
-      status.textContent="음성이 감지되지 않았습니다. 다시 눌러 말해 주세요.";
-    } else {
-      status.textContent="음성 인식 오류: "+e.error;
-    }
+  rec.onerror=e=>{
+    if(e.error==="not-allowed"||e.error==="service-not-allowed")s.textContent="마이크 권한이 차단되었습니다. 브라우저 사이트 권한에서 마이크를 허용해 주세요.";
+    else if(e.error==="no-speech")s.textContent="음성이 감지되지 않았어요. 다시 눌러 말해 주세요.";
+    else s.textContent="음성 인식 오류: "+e.error;
   };
-
-  rec.onend=()=>{
-    if(status.textContent.includes("듣는 중")) status.textContent="음성 인식이 끝났습니다.";
-  };
-
-  try{
-    rec.start();
-  }catch(err){
-    status.textContent="음성 인식을 시작하지 못했습니다. Papago 음성번역을 사용해 주세요.";
-  }
+  try{rec.start()}catch(e){s.textContent="음성 인식을 시작하지 못했습니다."}
 }
 
 document.getElementById("search").addEventListener("input",renderList);
-document.getElementById("quick").innerHTML=quickItems.map(a =>
- `<button onclick='speak(${JSON.stringify(a[1])})'><b>${a[0]}</b><span>${a[2]} · 🔊</span></button>`
-).join("");
-
-renderTabs();
-renderList();
-setVoiceUiState();
+updateNet();renderTabs();renderFavorites();renderList();syncLangUi();setVoiceUi();
 </script>
 </body>
 </html>
